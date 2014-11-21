@@ -1,5 +1,5 @@
 #!/bin/bash
-cd ~/Desktop/wp/$1
+#cd ~/Desktop/wp/$1
 
 # wp post create --post_type=page --post_title='Accueil' --post_status=publish
 # wp post create --post_type=page --post_title='Blog' --post_status=publish
@@ -29,11 +29,14 @@ cd ~/Desktop/wp/$1
 
 #subl 'wp-content/themes/'
 
-cd wp-content/themes/
-#git clone git@bitbucket.org:smoothiecreative/wordpress-base-theme.git
-cd prout
+# cd wp-content/themes/
+# #git clone git@bitbucket.org:smoothiecreative/wordpress-base-theme.git
+# cd prout
 
-open .
+# open .
+
+echo "Arg 1 : $1"
+echo "Arg 2 : $2"
 
 # mv wordpress-base-theme 'prout'
 # wp theme activate prout

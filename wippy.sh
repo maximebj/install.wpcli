@@ -51,7 +51,7 @@ echo -e "         Je vais installer WordPress pour votre site : ${cyan}$2${norma
 
 # CHECK :  Directory doesn't exist
 # go to wordpress installs folder
-cd ~/Desktop/wp/
+cd ~/Desktop/
 
 # check if provided folder name already exists
 if [ -d $1 ]; then
@@ -119,11 +119,11 @@ wp option update category_base theme
 wp option update tag_base sujet
 
 # Plugins install
-bot "J'installe les plugins à partir de plugins.txt :"
+bot "J'installe les plugins à partir de la liste des plugins :"
 while read line
 do
     wp plugin install $line --activate
-done < ~/Desktop/plugins.txt
+done < /Dropbox\ (Smoothie\ Creative)/Smoothie\ Creative/Développement/wippy/plugins.txt
 
 # acfkey="b3JkZXJfaWQ9MzI1Mjd8dHlwZT1kZXZlbG9wZXJ8ZGF0ZT0yMDE0LTA3LTA3IDEzOjMxOjU1"
 # acfurl="http://connect.advancedcustomfields.com/index.php?p=pro&a=download&k=$acfkey"
@@ -179,12 +179,15 @@ open $url
 open "$url/wp-admin"
 
 # Open in Sublime text
-cd "wp-content/themes"
+cd wp-content/themes
 subl $1
 
 # Open in finder
 cd $1
 open .
+
+# Copy password in clipboard
+echo $password | pbcopy
 
 
 # That's all ! Install summary
@@ -194,7 +197,7 @@ echo "URL du site:   $url"
 echo "Login admin :  admin$1"
 echo -e "Password :  ${cyan}${bold} $password ${normal}${normal}"
 line
-echo -e "${grey}(N'oubliez pas de noter le mot de passe)${normal}"
+echo -e "${grey}(N'oubliez pas le mot de passe ! Je l'ai copié dans le presse-papier)${normal}"
 
 line
 bot "à Bientôt !"
