@@ -51,7 +51,7 @@ echo -e "         Je vais installer WordPress pour votre site : ${cyan}$2${norma
 
 # CHECK :  Directory doesn't exist
 # go to wordpress installs folder
-cd ~/Desktop/
+cd ~/Desktop
 
 # check if provided folder name already exists
 if [ -d $1 ]; then
@@ -98,6 +98,51 @@ admin="admin$1"
 bot "et j'installe !"
 wp core install --url=$url --title="$2" --admin_user=$admin --admin_email=maxime@smoothie-creative.com --admin_password=$password
 
+# Plugins install
+bot "J'installe les plugins à partir de la liste des plugins :"
+while read line
+do
+    wp plugin install $line --activate
+done < ~/Dropbox\ \(Smoothie\ Creative\)/Smoothie\ Creative/Développement/wippy/plugins.txt
+
+# ACF Pro Download and activate
+# Not yet found the solution...
+# acfkey="b3JkZXJfaWQ9MzI1Mjd8dHlwZT1kZXZlbG9wZXJ8ZGF0ZT0yMDE0LTA3LTA3IDEzOjMxOjU1"
+# acfurl="http://connect.advancedcustomfields.com/index.php?p=pro&a=download&k=$acfkey"
+# wp plugin install $acfurl --activate
+
+# ACF pro licence activation
+# wp option update acf_pro_license $acfkey | base64
+# bot "J'ai activé ACF Pro avec votre licence"
+
+# Download  theme
+bot "Je télécharge notre thème open-source WP0 :"
+wp theme install "https://bitbucket.org/maximebj/wordpress-zero-theme/get/0d08b3714587.zip" --activate
+# --> not good because filename change on each new commit
+
+# Download from private git repository
+bot "Je télécharge notre thème Smoothie Framework :"
+cd wp-content/themes/
+git clone git@bitbucket.org:smoothiecreative/wordpress-base-theme.git
+mv wordpress-base-theme $1   # rename folder
+wp theme activate $1
+
+# Create standard pages
+bot "Je crée les pages habituelles (Accueil, blog, contact...)"
+wp post create --post_type=page --post_title='Accueil' --post_status=publish
+wp post create --post_type=page --post_title='Blog' --post_status=publish
+wp post create --post_type=page --post_title='Contact' --post_status=publish
+wp post create --post_type=page --post_title='Mentions Légales' --post_status=publish
+
+# Create fake posts
+bot "Je crée quelques faux articles"
+curl http://loripsum.net/api/5 | wp post generate --post_content --count=5
+
+# Change Homepage
+bot "Je change la page d'accueil et la page des articles"
+wp option update show_on_front page
+wp option update page_on_front 3
+wp option update page_for_posts 4
 
 # Misc cleanup
 bot "Je supprime Hello Dolly, les thèmes de base et les articles exemples"
@@ -118,57 +163,12 @@ wp rewrite flush
 wp option update category_base theme
 wp option update tag_base sujet
 
-# Plugins install
-bot "J'installe les plugins à partir de la liste des plugins :"
-while read line
-do
-    wp plugin install $line --activate
-done < /Dropbox\ (Smoothie\ Creative)/Smoothie\ Creative/Développement/wippy/plugins.txt
-
-# acfkey="b3JkZXJfaWQ9MzI1Mjd8dHlwZT1kZXZlbG9wZXJ8ZGF0ZT0yMDE0LTA3LTA3IDEzOjMxOjU1"
-# acfurl="http://connect.advancedcustomfields.com/index.php?p=pro&a=download&k=$acfkey"
-# wp plugin install $acfurl --activate
-
-# ACF pro licence activation
-# wp option update acf_pro_license $acfkey | base64
-# bot "J'ai activé ACF Pro avec votre licence"
-
-# Create standard pages
-bot "Je crée les pages habituelles (Accueil, blog, contact...)"
-wp post create --post_type=page --post_title='Accueil' --post_status=publish
-wp post create --post_type=page --post_title='Blog' --post_status=publish
-wp post create --post_type=page --post_title='Contact' --post_status=publish
-wp post create --post_type=page --post_title='Mentions Légales' --post_status=publish
-
-# Create fake posts
-bot "Je crée quelques faux articles"
-curl http://loripsum.net/api/5 | wp post generate --post_content --count=5
-
-# change Homepage
-bot "Je change la page d'accueil et la page des articles"
-wp option update show_on_front page
-wp option update page_on_front 5
-wp option update page_for_posts 6
-
-# Download  theme
-bot "Je télécharge et active notre thème :"
-wp theme install "https://bitbucket.org/maximebj/wordpress-zero-theme/get/dcbb90b8721a.zip" --activate
-
-# Download from private git repository
-bot "Je télécharge notre thème :"
-cd wp-content/themes/
-git clone git@bitbucket.org:smoothiecreative/wordpress-base-theme.git
-mv wordpress-base-theme $1
-wp theme activate $1
-
 # Git project
 bot "Je Git le projet :"
 cd ../..
-git init
-git commit . -m "Initial commit"
-
-# Create MAMP Host
-# TODO
+git init    # git project
+git add -A  # Add all untracked files
+git commit -m "Initial commit"   # Commit changes
 
 
 # Open the stuff
