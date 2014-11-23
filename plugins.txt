@@ -1,4 +1,2 @@
 wordpress-seo
 jetpack
-cocorico-social
-pastacode

@@ -144,10 +144,21 @@ wp option update show_on_front page
 wp option update page_on_front 3
 wp option update page_for_posts 4
 
+
+# Menu stuff
+bot "Je crée le menu principal, assigne les pages, et je lie l'emplacement du thème : "
+wp menu create "Menu Principal"
+wp menu item add-post menu-principal 3
+wp menu item add-post menu-principal 4
+wp menu item add-post menu-principal 5
+wp menu location assign menu-principal main-menu
+
+
 # Misc cleanup
 bot "Je supprime Hello Dolly, les thèmes de base et les articles exemples"
-wp post delete 1 # Article exemple
-wp post delete 2 # page exemple
+wp post delete 1 --force # Article exemple - no trash
+wp post delete 2 --force # page exemple
+wp comment delete 1 --force # comment exemple
 wp plugin delete hello
 wp theme delete twentytwelve
 wp theme delete twentythirteen
@@ -172,11 +183,11 @@ git commit -m "Initial commit"   # Commit changes
 
 
 # Open the stuff
-bot "Je lance le navigateur, Sublime Text et le finder :"
+bot "Je lance le navigateur, Sublime Text et le finder."
 
 # Open in browser
 open $url
-open "$url/wp-admin"
+open "${url}wp-admin"
 
 # Open in Sublime text
 cd wp-content/themes

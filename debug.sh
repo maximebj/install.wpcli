@@ -1,4 +1,12 @@
 #!/bin/bash
+#
+# This script is for testing purpose
+
+cd ~/Desktop/wp-tech/
+
+
+# --- Stuff tested --------
+
 #cd ~/Desktop/wp/$1
 
 # wp post create --post_type=page --post_title='Accueil' --post_status=publish
@@ -13,7 +21,6 @@
 # wp option update category_base /theme
 # wp option update tag_base /sujet
 
-
 # acfkey="b3JkZXJfaWQ9MzI1Mjd8dHlwZT1kZXZlbG9wZXJ8ZGF0ZT0yMDE0LTA3LTA3IDEzOjMxOjU1"
 # acfurl="http://connect.advancedcustomfields.com/index.php?p=pro&a=update&k=${acfkey}"
 # wp plugin install ${acfurl}
@@ -26,7 +33,6 @@
 # git clone git@bitbucket.org:smoothiecreative/wordpress-base-theme.git
 # wp theme activate wordpress-base-theme
 
-
 #subl 'wp-content/themes/'
 
 # cd wp-content/themes/
@@ -35,8 +41,15 @@
 
 # open .
 
-echo "Arg 1 : $1"
-echo "Arg 2 : $2"
+# echo "Arg 1 : $1"
+# echo "Arg 2 : $2"
 
 # mv wordpress-base-theme 'prout'
 # wp theme activate prout
+
+#git clone git@bitbucket.org:smoothiecreative/wordpress-base-theme.git
+
+# wp menu item add-post menu-principal 3
+# wp menu item add-post menu-principal 4
+# wp menu item add-post menu-principal 5
+# wp menu location assign menu-principal main-menu
