@@ -1,2 +1,3 @@
 wordpress-seo
-jetpack
+contact-form-7
+# end

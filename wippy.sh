@@ -48,14 +48,13 @@ function bot {
 bot "${blue}${bold}Bonjour ! Je suis Wippy.${normal}"
 echo -e "         Je vais installer WordPress pour votre site : ${cyan}$2${normal}"
 
-
 # CHECK :  Directory doesn't exist
 # go to wordpress installs folder
 cd ~/Desktop
 
 # check if provided folder name already exists
 if [ -d $1 ]; then
-  bot "${red}Le dossier ${cyan}$1${red} existe déjà${normal}."
+  bot "${red}Le dossier ${cyan}$1${red}existe déjà${normal}."
   echo "         Par sécurité, je ne vais pas plus loin pour ne rien écraser."
   line
 
@@ -92,7 +91,7 @@ password=${passgen:0:10}
 
 # local url and admin login
 url="http://"$1":8888/"
-admin="admin$1"
+admin="smoothie-$1"
 
 # launch install
 bot "et j'installe !"
@@ -105,27 +104,16 @@ do
     wp plugin install $line --activate
 done < ~/Dropbox\ \(Smoothie\ Creative\)/Smoothie\ Creative/Développement/wippy/plugins.txt
 
-# ACF Pro Download and activate
-# Not yet found the solution...
-# acfkey="b3JkZXJfaWQ9MzI1Mjd8dHlwZT1kZXZlbG9wZXJ8ZGF0ZT0yMDE0LTA3LTA3IDEzOjMxOjU1"
-# acfurl="http://connect.advancedcustomfields.com/index.php?p=pro&a=download&k=$acfkey"
-# wp plugin install $acfurl --activate
-
-# ACF pro licence activation
-# wp option update acf_pro_license $acfkey | base64
-# bot "J'ai activé ACF Pro avec votre licence"
-
-# Download  theme
-bot "Je télécharge notre thème open-source WP0 :"
-wp theme install "https://bitbucket.org/maximebj/wordpress-zero-theme/get/0d08b3714587.zip" --activate
-# --> not good because filename change on each new commit
+# Download ACF Pro
+curl -L -v 'http://connect.advancedcustomfields.com/index.php?p=pro&a=download&k=b3JkZXJfaWQ9MzI1Mjd8dHlwZT1kZXZlbG9wZXJ8ZGF0ZT0yMDE0LTA3LTA3IDEzOjMxOjU1' | tar -xf- -C wp-content/plugins/
+wp plugin activate advanced-custom-fields-pro
 
 # Download from private git repository
-bot "Je télécharge notre thème Smoothie Framework :"
-cd wp-content/themes/
-git clone git@bitbucket.org:smoothiecreative/wordpress-base-theme.git
-mv wordpress-base-theme $1   # rename folder
-wp theme activate $1
+# bot "Je télécharge notre thème Smoothie Framework :"
+# cd wp-content/themes/
+# git clone git@bitbucket.org:smoothiecreative/wordpress-base-theme.git
+# mv wordpress-base-theme $1   # rename folder
+# wp theme activate $1
 
 # Create standard pages
 bot "Je crée les pages habituelles (Accueil, blog, contact...)"
@@ -151,14 +139,13 @@ wp menu create "Menu Principal"
 wp menu item add-post menu-principal 3
 wp menu item add-post menu-principal 4
 wp menu item add-post menu-principal 5
-wp menu location assign menu-principal main-menu
+#wp menu location assign menu-principal main-menu
 
 
 # Misc cleanup
 bot "Je supprime Hello Dolly, les thèmes de base et les articles exemples"
-wp post delete 1 --force # Article exemple - no trash
+wp post delete 1 --force # Article exemple - no trash. Comment is also deleted
 wp post delete 2 --force # page exemple
-wp comment delete 1 --force # comment exemple
 wp plugin delete hello
 wp theme delete twentytwelve
 wp theme delete twentythirteen
@@ -167,12 +154,16 @@ wp option update blogdescription ''
 
 # Permalinks to /%postname%/
 bot "J'active la structure des permaliens"
-wp rewrite structure "/%postname%/"
-wp rewrite flush
+wp rewrite structure "/%postname%/" --hard
+wp rewrite flush --hard
 
 # cat and tag base update
 wp option update category_base theme
 wp option update tag_base sujet
+
+
+# Get our base WP Projet gitignore file from our repo
+# TODO
 
 # Git project
 bot "Je Git le projet :"
@@ -182,20 +173,23 @@ git add -A  # Add all untracked files
 git commit -m "Initial commit"   # Commit changes
 
 
+# Restart Mamp Apache
+# TODO
+
 # Open the stuff
-bot "Je lance le navigateur, Sublime Text et le finder."
+#bot "Je lance le navigateur, Sublime Text et le finder."
 
 # Open in browser
-open $url
-open "${url}wp-admin"
+#open $url
+#open "${url}wp-admin"
 
 # Open in Sublime text
-cd wp-content/themes
-subl $1
+#cd wp-content/themes
+#subl $1
 
 # Open in finder
-cd $1
-open .
+#cd $1
+#open .
 
 # Copy password in clipboard
 echo $password | pbcopy
@@ -214,8 +208,3 @@ line
 bot "à Bientôt !"
 line
 line
-
-
-
-
-
